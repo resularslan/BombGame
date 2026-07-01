@@ -1,2 +1,3 @@
 Create a Tilemap - DONE
-Write random level generator 
+Write random level generator - DONE
+Make player move -
