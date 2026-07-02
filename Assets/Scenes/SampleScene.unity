@@ -119,11 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!212 &341122488 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 6127541406370233982, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
-  m_PrefabInstance: {fileID: 1059815038}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +250,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.5, y: 9.5, z: -10}
+  m_LocalPosition: {x: 5, y: 10, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -278,25 +273,37 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 2576044462894716664, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
-      propertyPath: m_Layer
-      value: 8
+    - target: {fileID: 4348528763606916360, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
+      propertyPath: bombCount
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2576044462894716664, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
-      propertyPath: m_TagString
-      value: Player
+    - target: {fileID: 5742546107506013652, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
+      propertyPath: m_Size.x
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3361320305008463756, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
-      propertyPath: spriteRenderer
-      value: 
-      objectReference: {fileID: 341122488}
+    - target: {fileID: 5742546107506013652, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6075188625685670966, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6075188625685670966, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6075188625685670966, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6075188625685670966, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.5
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 6075188625685670966, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 14.5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6075188625685670966, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -330,6 +337,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6075188625685670966, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -352,7 +363,7 @@ GameObject:
   - component: {fileID: 1585105275}
   m_Layer: 0
   m_Name: LevelGenerator
-  m_TagString: Untagged
+  m_TagString: LevelGenerator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -372,7 +383,6 @@ MonoBehaviour:
   tilemap_bricks: {fileID: 852932839}
   tilemap_blocks: {fileID: 1577459513}
   tile_brick: {fileID: 11400000, guid: d3a74caab7e05754383c490474bdad5e, type: 2}
-  player: {fileID: 2576044462894716664, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
 --- !u!4 &1585105276
 Transform:
   m_ObjectHideFlags: 0
@@ -399,14 +409,6 @@ PrefabInstance:
     - target: {fileID: 4713341230353541191, guid: d247dc86fbcecd145952ee0c1f453234, type: 3}
       propertyPath: m_Name
       value: Grid
-      objectReference: {fileID: 0}
-    - target: {fileID: 7049862718470377803, guid: d247dc86fbcecd145952ee0c1f453234, type: 3}
-      propertyPath: m_CompositeOperation
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7313934275196290420, guid: d247dc86fbcecd145952ee0c1f453234, type: 3}
-      propertyPath: m_CompositeOperation
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8846273653978853384, guid: d247dc86fbcecd145952ee0c1f453234, type: 3}
       propertyPath: m_LocalPosition.x

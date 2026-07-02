@@ -3,4 +3,16 @@ Write random level generator - DONE
 Make player move - DONE
 Make collision detection with raycast - DONE
 Prevent player-block intersection - DONE
-Make bomb -
+Create a bomb - DONE
+Make spawn mechanic - DONE 
+Make the bomb explosion animation -
+Make the bomb explosion destroy the bricks -
+Make the camera follow player -
+Create an enemy -
+Make basic enemy AI -
+Make enemy die - 
+Make player die -
+  
+
+
+

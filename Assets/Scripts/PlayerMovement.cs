@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -7,11 +8,11 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask layerMask;
     private SpriteRenderer spriteRenderer;
     private Vector2 half;
-    Vector2 direction;
+    private Vector2 direction;
     void Start()
     {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        layerMask = ~(1 << LayerMask.NameToLayer("Player"));;
+        layerMask = ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Default"));
         half = spriteRenderer.bounds.extents;
     }
     void Update()   
@@ -26,12 +27,12 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Mathf.Abs(Vector2.Dot(half,direction)), layerMask);
             if (!hit)
             {
-                transform.Translate(direction * speed * Time.deltaTime);
+                transform.Translate(speed * Time.deltaTime * direction);
                 preventIntersection();
             }
             else
             {
-                transform.position = new Vector3(hit.point.x - (direction.x * half.x), hit.point.y - (direction.y * half.y), 0);
+                transform.position = new Vector3(hit.point.x - (direction.x * half.x), hit.point.y - (direction.y * half.y), 0);   
             }
             if (hit.collider != null)
             {
@@ -43,15 +44,15 @@ public class PlayerMovement : MonoBehaviour
     private void preventIntersection()
     {
         float step =  speed * Time.deltaTime;
-        Vector3 target = transform.position;
         if (Mathf.Abs(direction.x) > 0)
         {
-            target = new Vector3(transform.position.x, MathF.Round(transform.position.y), 0);
+            Vector3 target = new Vector3(transform.position.x, MathF.Round(transform.position.y), 0);
+            transform.position = Vector3.MoveTowards(transform.position, target, step);
         }
         else if (Mathf.Abs(direction.y) > 0)
         {
-            target = new Vector3(MathF.Round(transform.position.x), transform.position.y, 0);
+            Vector3 target = new Vector3(MathF.Round(transform.position.x), transform.position.y, 0);
+            transform.position = Vector3.MoveTowards(transform.position, target, step);
         }
-        transform.position = Vector3.MoveTowards(transform.position, target, step);
     }
 }

@@ -6,13 +6,15 @@ public class LevelGenerator : MonoBehaviour
     public Tilemap tilemap_bricks;
     public Tilemap tilemap_blocks;
     public Tile tile_brick;
-    public GameObject player;
+    private GameObject player;
     [System.NonSerialized] public int[,] gridData;
+    [System.NonSerialized] public BoundsInt bounds;
     void Start()
     {
+        player = GameObject.FindWithTag("Player");
         tilemap_bricks.ClearAllTiles();
         tilemap_blocks.CompressBounds();
-        BoundsInt bounds = tilemap_blocks.cellBounds;
+        bounds = tilemap_blocks.cellBounds;
         int width = bounds.size.x;
         int height = bounds.size.y;
         gridData = new int[width,height];
