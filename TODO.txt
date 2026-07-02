@@ -1,3 +1,6 @@
 Create a Tilemap - DONE
 Write random level generator - DONE
-Make player move -
+Make player move - DONE
+Make collision detection with raycast - DONE
+Prevent player-block intersection - DONE
+Make bomb -
