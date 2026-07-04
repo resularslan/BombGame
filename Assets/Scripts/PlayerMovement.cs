@@ -1,5 +1,3 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -34,24 +32,25 @@ public class PlayerMovement : MonoBehaviour
             {
                 transform.position = new Vector3(hit.point.x - (direction.x * half.x), hit.point.y - (direction.y * half.y), 0);   
             }
-            if (hit.collider != null)
-            {
-                Debug.Log($"Hit object name: {hit.collider.name} on Layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)}");
-            }
-            Debug.DrawRay(transform.position,direction * half,Color.red);
+            // if (hit.collider != null)
+            // {
+            //     Debug.Log($"Hit object name: {hit.collider.name} on Layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)}");
+            // }
+            // Debug.DrawRay(transform.position,direction * half,Color.red);
         }
     }
     private void preventIntersection()
     {
         float step =  speed * Time.deltaTime;
+        Vector3 cellWorldPosition = GridManager.Instance.findCellWorldPosition(transform.position);
         if (Mathf.Abs(direction.x) > 0)
         {
-            Vector3 target = new Vector3(transform.position.x, MathF.Round(transform.position.y), 0);
+            Vector3 target = new Vector3(transform.position.x, cellWorldPosition.y, 0);
             transform.position = Vector3.MoveTowards(transform.position, target, step);
         }
         else if (Mathf.Abs(direction.y) > 0)
         {
-            Vector3 target = new Vector3(MathF.Round(transform.position.x), transform.position.y, 0);
+            Vector3 target = new Vector3(cellWorldPosition.x, transform.position.y, 0);
             transform.position = Vector3.MoveTowards(transform.position, target, step);
         }
     }

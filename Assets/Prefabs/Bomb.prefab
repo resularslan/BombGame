@@ -153,3 +153,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BombController
   seconds: 3
+  fire: {fileID: 9206473614337219985, guid: fb97c7a34b158c44f80941eb8945acda, type: 3}

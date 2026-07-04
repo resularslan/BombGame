@@ -18,11 +18,14 @@ public class LevelGenerator : MonoBehaviour
         int width = bounds.size.x;
         int height = bounds.size.y;
         gridData = new int[width,height];
+        // print(bounds.xMin);
+        // print(bounds.yMin);
+        tilemap_bricks.SetTile(new Vector3Int(0,0,0), tile_brick);
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                Vector3Int tilePos = new Vector3Int(x + bounds.xMin, y + bounds.yMin,0);
+                Vector3Int tilePos = GridManager.Instance.findCellPosition(new Vector3(x + bounds.xMin, y + bounds.yMin,0));
                 if ((x == 1 && y == height - 2) || (x == 2 && y == height - 2) || (x == 1 && y == height - 3))
                 {
                     gridData[x,y] = 0;
