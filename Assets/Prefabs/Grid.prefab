@@ -1910,6 +1910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8846273653978853384}
   - component: {fileID: 4870662407178807107}
+  - component: {fileID: 2183666840770465078}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -1931,8 +1932,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3132711552060869980}
-  - {fileID: 8340493762152910294}
   - {fileID: 89359498138829548}
+  - {fileID: 8340493762152910294}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &4870662407178807107
@@ -1947,6 +1948,19 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &2183666840770465078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4713341230353541191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe84434e58fab3a48ab4d55d920c9d10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  tile_brick: {fileID: 11400000, guid: d3a74caab7e05754383c490474bdad5e, type: 2}
 --- !u!1 &6512005655033799214
 GameObject:
   m_ObjectHideFlags: 0

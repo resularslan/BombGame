@@ -1,0 +1,16 @@
+using System.Collections;
+using UnityEngine;
+
+public class FireManager : MonoBehaviour
+{
+    private float seconds = 1f;
+    void OnEnable()
+    {
+        StartCoroutine(fireAnimation(seconds));
+    }
+    private IEnumerator fireAnimation(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        ObjectSpawner.Instance.DestroyObject(gameObject);
+    }
+}

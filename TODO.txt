@@ -6,7 +6,8 @@ Prevent player-block intersection - DONE
 Create a bomb - DONE
 Make bomb spawn mechanic - DONE
 Make the bomb explosion animation - DONE
-Make the bomb explosion destroy the bricks -
+Create object pooling system - DONE
+Make the bomb explosion destroy the bricks - DONE
 Make the camera follow player -
 Create an enemy -
 Make basic enemy AI -

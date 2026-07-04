@@ -5,21 +5,19 @@ using UnityEngine;
 public class BombController : MonoBehaviour
 {
     [SerializeField] private float seconds = 3f;
-    private LevelGenerator levelGenerator;
     private PlayerController playerController;
     [SerializeField] private GameObject fire;
     private SpriteRenderer spriteRenderer;
     private Vector2 size;
     private int x,y;
 
-    void Start()
+    void OnEnable()
     {
-        levelGenerator = GameObject.FindWithTag("LevelGenerator").GetComponent<LevelGenerator>();
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         size = spriteRenderer.bounds.size;
-        x = Mathf.FloorToInt(transform.position.x - levelGenerator.bounds.xMin);
-        y = Mathf.FloorToInt(transform.position.y - levelGenerator.bounds.yMin);
+        x = GridManager.Instance.findGridDataIndex(transform.position).x;
+        y = GridManager.Instance.findGridDataIndex(transform.position).y;
         StartCoroutine(Explode(seconds));
     }
     private IEnumerator Explode(float waitSeconds)
@@ -27,14 +25,15 @@ public class BombController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(waitSeconds);
-            levelGenerator.gridData[x,y] = 0;
+            GridManager.Instance.gridData[x,y] = 0;
             playerController.bombCount = playerController.maxBomb;
-            explodeAnimation();
-            Destroy(gameObject);
+            createExplode();
+            gameObject.layer = LayerMask.NameToLayer("Default");
+            ObjectSpawner.Instance.DestroyObject(gameObject);
         }
     }
 
-    private void explodeAnimation()
+    private void createExplode()
     {
         createFire(x,y,0,0);
         for (int i = 1; i <= playerController.bombLevel; i++)
@@ -48,12 +47,17 @@ public class BombController : MonoBehaviour
 
     private void createFire(int thisX, int thisY, float sizeX, float sizeY)
     {
-       
-            if (levelGenerator.gridData[thisX,thisY] == 0)
-            {
-                Vector3 position = new Vector3(transform.position.x + sizeX, transform.position.y + sizeY, transform.position.z);
-                GameObject fireObject = Instantiate(fire, position, quaternion.identity);
-                Destroy(fireObject, 1);
-            }
+        if (thisX < 0 || thisX >= GridManager.Instance.bounds.size.x || thisY < 0 || thisY >= GridManager.Instance.bounds.size.y) return;
+        if (GridManager.Instance.gridData[thisX,thisY] == 0)
+        {
+            Vector3 position = new Vector3(transform.position.x + sizeX, transform.position.y + sizeY, transform.position.z);
+            ObjectSpawner.Instance.InstantiateObject(fire, position, quaternion.identity);
+        }
+        else if (GridManager.Instance.gridData[thisX,thisY] == 2)
+        {
+            Vector3Int position = GridManager.Instance.findCellPosition(new Vector3(transform.position.x + sizeX, transform.position.y + sizeY, transform.position.z));
+            GridManager.Instance.tilemap_bricks.SetTile(position, null);
+            GridManager.Instance.gridData[thisX,thisY] = 0;
+        }
     }
 }
