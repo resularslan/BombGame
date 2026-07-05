@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   gameObjects:
   - Key: {fileID: 3939457356474607527, guid: 53c8b92635f7df14ebda8c913d587a68, type: 3}
-    Value: 15
+    Value: 50
   - Key: {fileID: 9206473614337219985, guid: fb97c7a34b158c44f80941eb8945acda, type: 3}
     Value: 50
 --- !u!4 &267963687
@@ -321,6 +321,14 @@ PrefabInstance:
       propertyPath: grid
       value: 
       objectReference: {fileID: 2037291259}
+    - target: {fileID: 4348528763606916360, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
+      propertyPath: maxBomb
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4348528763606916360, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
+      propertyPath: bombLevel
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6075188625685670966, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.5
