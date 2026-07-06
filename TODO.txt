@@ -8,8 +8,8 @@ Make bomb spawn mechanic - DONE
 Make the bomb explosion animation - DONE
 Create object pooling system - DONE
 Make the bomb explosion destroy the bricks - DONE
-Make the bomb explosion explode another bombs - DONE
-Make the camera follow player -
+Make the bomb explosion explode other bombs - DONE
+Make the camera follow player - DONE
 Create an enemy -
 Make basic enemy AI -
 Make enemy die - 

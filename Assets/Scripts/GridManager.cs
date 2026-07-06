@@ -7,7 +7,7 @@ public class GridManager : MonoBehaviour
     public static GridManager Instance { get; private set; }
     private Grid grid;
     [System.NonSerialized] public Tilemap tilemap_bricks;
-    private Tilemap tilemap_blocks;
+    [System.NonSerialized] public Tilemap tilemap_blocks;
     public Tile tile_brick;
     [System.NonSerialized] public int[,] gridData;
     [System.NonSerialized] public BoundsInt bounds;

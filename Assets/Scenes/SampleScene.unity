@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -305,6 +306,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 908689130ce1c0e42b3b2e27b367ece0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1001 &1059815038
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -323,7 +336,7 @@ PrefabInstance:
       objectReference: {fileID: 2037291259}
     - target: {fileID: 4348528763606916360, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
       propertyPath: maxBomb
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4348528763606916360, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
       propertyPath: bombLevel

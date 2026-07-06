@@ -38,22 +38,17 @@ public class ObjectSpawner : MonoBehaviour
     {
         GameObject thisObject = dict[original.name + "(Clone)"].Dequeue();
         thisObject.transform.position = position;
-        if (!findGameObjectByPosition.ContainsKey(position))
-        {
-            findGameObjectByPosition.Add(position,thisObject);
-        }
-        else
-        {
-            DestroyObject(thisObject);
-            findGameObjectByPosition.Add(position,thisObject);
-        }
+        findGameObjectByPosition[position] = thisObject;
         thisObject.transform.rotation = rotation;
         thisObject.SetActive(true);
     }
 
     public void DestroyObject(GameObject original)
     {
-        if (findGameObjectByPosition.ContainsKey(original.transform.position)) findGameObjectByPosition.Remove(original.transform.position);
+        if (findGameObjectByPosition.ContainsKey(original.transform.position))
+        {
+            findGameObjectByPosition.Remove(original.transform.position);
+        }
         original.SetActive(false);
         original.transform.position = new Vector3(-50f,-50f,0f);
         original.transform.rotation = quaternion.identity;
