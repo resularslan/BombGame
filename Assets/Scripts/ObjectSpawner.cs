@@ -29,6 +29,7 @@ public class ObjectSpawner : MonoBehaviour
             for (int i = 0; i < pair.Value; i++)
             {
                 GameObject clone = Instantiate(pair.Key, new Vector3(-50f, -50f, 0f), Quaternion.identity);
+                clone.SetActive(false);
                 dict[clone.name].Enqueue(clone);
             }
         }
@@ -36,9 +37,25 @@ public class ObjectSpawner : MonoBehaviour
 
     public void InstantiateObject(GameObject original, Vector3 position, Quaternion rotation)
     {
-        GameObject thisObject = dict[original.name + "(Clone)"].Dequeue();
+        GameObject thisObject = null;
+        string key = original.name + "(Clone)";
+        if (dict[key].Count != 0)
+        {
+            thisObject = dict[key].Dequeue();
+        }
+        else
+        {
+            thisObject = Instantiate(original, position, rotation);
+        }
         thisObject.transform.position = position;
-        findGameObjectByPosition[position] = thisObject;
+        if (findGameObjectByPosition.ContainsKey(position))
+        {
+            findGameObjectByPosition[position] = thisObject;
+        }
+        else
+        {
+            findGameObjectByPosition.Add(position,thisObject);
+        }
         thisObject.transform.rotation = rotation;
         thisObject.SetActive(true);
     }

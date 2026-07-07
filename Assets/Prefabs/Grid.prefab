@@ -1961,6 +1961,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   tile_brick: {fileID: 11400000, guid: d3a74caab7e05754383c490474bdad5e, type: 2}
+  player: {fileID: 2576044462894716664, guid: 3138cb43cb0469a46a256c662359252f, type: 3}
 --- !u!1 &6512005655033799214
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -7,10 +6,11 @@ public class GridManager : MonoBehaviour
     public static GridManager Instance { get; private set; }
     private Grid grid;
     [System.NonSerialized] public Tilemap tilemap_bricks;
-    [System.NonSerialized] public Tilemap tilemap_blocks;
+    private Tilemap tilemap_blocks;
     public Tile tile_brick;
     [System.NonSerialized] public int[,] gridData;
     [System.NonSerialized] public BoundsInt bounds;
+    public GameObject player;
     void Start()
     {
         tilemap_bricks.ClearAllTiles();
@@ -26,9 +26,14 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                Vector3Int tilePos = GridManager.Instance.findCellPosition(new Vector3(x + bounds.xMin, y + bounds.yMin,0));
+                Vector3Int tilePos = findCellPosition(new Vector3(x + bounds.xMin, y + bounds.yMin,0));
                 if ((x == 1 && y == height - 2) || (x == 2 && y == height - 2) || (x == 1 && y == height - 3))
                 {
+                    if (x == 1 && y == height - 2)
+                    {
+                        Vector3 playerPosition = findCellWorldPosition(tilePos);
+                        Instantiate(player, playerPosition, Quaternion.identity);
+                    }
                     gridData[x,y] = 0;
                     continue;
                 }
@@ -70,5 +75,29 @@ public class GridManager : MonoBehaviour
         int x = Mathf.FloorToInt(position.x - bounds.xMin);
         int y = Mathf.FloorToInt(position.y - bounds.yMin);
         return new Vector2Int(x,y);
+    }
+    public bool checkGridData(int x, int y, int value)
+    {
+        if (!checkBounds(x,y))
+        {
+            return false;
+        }
+        return gridData[x,y] == value;
+    }
+    public void setGridData(int x, int y, int value)
+    {
+        if (!checkBounds(x,y))
+        {
+            return;
+        }
+        gridData[x,y] = value;
+    }
+    public bool checkBounds(int x, int y)
+    {
+        if (x < 0 || x >= bounds.size.x || y < 0 || y >= bounds.size.y)
+        {
+            return false;
+        }
+        return true;
     }
 }

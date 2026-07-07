@@ -13,11 +13,14 @@ public class BombController : MonoBehaviour
     private int x,y;
     private IEnumerator coroutine;
 
-    void OnEnable()
+    void Start()
     {
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         size = spriteRenderer.bounds.size;
+    }
+    void OnEnable()
+    {   
         x = GridManager.Instance.findGridDataIndex(transform.position).x;
         y = GridManager.Instance.findGridDataIndex(transform.position).y;
         coroutine = Explode(seconds);
@@ -25,10 +28,16 @@ public class BombController : MonoBehaviour
     }
     void OnDisable()
     {
-        GridManager.Instance.gridData[x,y] = 0;
-        playerController.bombCount = playerController.maxBomb;
+        GridManager.Instance.setGridData(x,y,0);
+        if (playerController != null)
+        {
+            playerController.bombCount++;
+        }
         gameObject.layer = LayerMask.NameToLayer("Default");
-        createExplode();
+        if (GridManager.Instance.checkBounds(x,y))
+        {
+            createExplode();
+        }
     }
     private IEnumerator Explode(float waitSeconds)
     {
@@ -55,15 +64,14 @@ public class BombController : MonoBehaviour
             {
                 int targetX = x + i * direction.x;
                 int targetY = y + i * direction.y;
+                if (!GridManager.Instance.checkBounds(targetX,targetY))
+                {
+                    break;
+                }
                 int cellData = GridManager.Instance.gridData[targetX,targetY];
                 float sizeX = size.x * i * direction.x;
                 float sizeY = size.y * i * direction.y;
                 Vector3 position = new Vector3(transform.position.x + sizeX, transform.position.y + sizeY, transform.position.z);
-                if (targetX < 0 || targetX >= GridManager.Instance.bounds.size.x || 
-                targetY < 0 || targetY >= GridManager.Instance.bounds.size.y)
-                {
-                    break;
-                }
                 if (cellData == 0)
                 {
                     ObjectSpawner.Instance.InstantiateObject(fire, position, quaternion.identity);
@@ -74,19 +82,29 @@ public class BombController : MonoBehaviour
                     {
                         Vector3Int tilePos = GridManager.Instance.findCellPosition(position);
                         GridManager.Instance.tilemap_bricks.SetTile(tilePos, null);
-                        GridManager.Instance.gridData[targetX,targetY] = 0;
+                        GridManager.Instance.setGridData(targetX,targetY,0);
                         ObjectSpawner.Instance.InstantiateObject(fire, position, quaternion.identity);
                     }
                     else if (cellData == 3)
                     {
                         GameObject targetBomb = ObjectSpawner.Instance.findGameObjectByPosition[position];
-                        BombController targetBombController = targetBomb.GetComponent<BombController>();
-                        targetBombController.explodeImmediately();
+                        if (targetBomb != null)
+                        {
+                            BombController targetBombController = targetBomb.GetComponent<BombController>();
+                            targetBombController.explodeImmediately();
+                        }
                     }
                     break;
                 }
 
             }
+        }
+    }
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            gameObject.layer = LayerMask.NameToLayer("Bomb");
         }
     }
 }

@@ -182,7 +182,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   speed: 2.5
-  grid: {fileID: 0}
 --- !u!114 &4348528763606916360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,4 +195,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   bomb: {fileID: 3939457356474607527, guid: 53c8b92635f7df14ebda8c913d587a68, type: 3}
+  bombLevel: 1
   bombCount: 1
