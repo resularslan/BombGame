@@ -11,7 +11,8 @@ Make the bomb explosion destroy the bricks - DONE
 Make the bomb explosion explode other bombs - DONE
 Make the camera follow player - DONE
 Create an enemy - DONE
-Make basic enemy AI -
+Make basic enemy AI - DONE
+Create random enemy generator - DONE 
 Make enemy die - 
 Make player die -
   

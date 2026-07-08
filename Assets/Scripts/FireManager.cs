@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FireManager : MonoBehaviour
 {
-    private float seconds = 1f;
+    public float seconds = 1f;
     void OnEnable()
     {
         StartCoroutine(fireAnimation(seconds));

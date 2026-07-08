@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -11,6 +13,9 @@ public class GridManager : MonoBehaviour
     [System.NonSerialized] public int[,] gridData;
     [System.NonSerialized] public BoundsInt bounds;
     public GameObject player;
+    public GameObject enemy;
+    public int enemyCount = 6;
+    private List<Vector3> spawnableLocations;
     void Start()
     {
         tilemap_bricks.ClearAllTiles();
@@ -19,6 +24,7 @@ public class GridManager : MonoBehaviour
         int width = bounds.size.x;
         int height = bounds.size.y;
         gridData = new int[width,height];
+        spawnableLocations = new List<Vector3>();
         // print(bounds.xMin);
         // print(bounds.yMin);
         // tilemap_bricks.SetTile(new Vector3Int(0,0,0), tile_brick);
@@ -26,7 +32,7 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                Vector3Int tilePos = findCellPosition(new Vector3(x + bounds.xMin, y + bounds.yMin,0));
+                Vector3Int tilePos = findCellPositionByGridData(x,y);
                 if ((x == 1 && y == height - 2) || (x == 2 && y == height - 2) || (x == 1 && y == height - 3))
                 {
                     if (x == 1 && y == height - 2)
@@ -49,8 +55,18 @@ public class GridManager : MonoBehaviour
                         gridData[x,y] = 2;
                         tilemap_bricks.SetTile(tilePos, tile_brick);
                     }
+                    else
+                    {
+                        spawnableLocations.Add(findCellWorldPosition(tilePos));
+                    }
                 }
             }
+        }
+        for (int i = 0; i < enemyCount; i++)
+        {
+            int randomIndex = Random.Range(0,spawnableLocations.Count);
+            Instantiate(enemy, spawnableLocations[randomIndex], Quaternion.identity);
+            spawnableLocations.RemoveAt(randomIndex);
         }
     }
     private void Awake()
@@ -75,6 +91,10 @@ public class GridManager : MonoBehaviour
         int x = Mathf.FloorToInt(position.x - bounds.xMin);
         int y = Mathf.FloorToInt(position.y - bounds.yMin);
         return new Vector2Int(x,y);
+    }
+    public Vector3Int findCellPositionByGridData(int x, int y)
+    {
+        return new Vector3Int(x + bounds.xMin, y + bounds.yMin,0);
     }
     public bool checkGridData(int x, int y, int value)
     {

@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        layerMask = ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Fire"));
+        layerMask = ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enemy") |  1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Fire"));
         half = spriteRenderer.bounds.extents;
     }
     void Update()   
