@@ -7,11 +7,16 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Vector2 half;
     private Vector2 direction;
+    private GridManager gridManager;
+    void Awake()
+    {
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();  
+    }
     void Start()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         layerMask = ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enemy") |  1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Fire"));
         half = spriteRenderer.bounds.extents;
+        gridManager = GridManager.Instance;
     }
     void Update()   
     {
@@ -22,15 +27,19 @@ public class PlayerMovement : MonoBehaviour
         }
         if (direction != Vector2.zero)
         {
+            Vector3 currentPosition = transform.position;
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Mathf.Abs(Vector2.Dot(half,direction)), layerMask);
             if (!hit)
             {
-                transform.Translate(speed * Time.deltaTime * direction);
-                preventIntersection();
+                Vector3 movement = speed * Time.deltaTime * (Vector3)direction;
+                Vector3 movedPosition = currentPosition + movement;
+                Vector3 lastPosition = PreventIntersection(movedPosition);
+                transform.position = lastPosition;
             }
             else
             {
-                transform.position = new Vector3(hit.point.x - (direction.x * half.x), hit.point.y - (direction.y * half.y), 0);   
+                Vector3 hitPosition = new Vector3(hit.point.x - (direction.x * half.x), hit.point.y - (direction.y * half.y), 0);
+                transform.position = hitPosition;   
             }
             // if (hit.collider != null)
             // {
@@ -39,19 +48,20 @@ public class PlayerMovement : MonoBehaviour
             // Debug.DrawRay(transform.position,direction * half,Color.red);
         }
     }
-    private void preventIntersection()
+    private Vector3 PreventIntersection(Vector3 movedPosition)
     {
         float step =  speed * Time.deltaTime;
-        Vector3 cellWorldPosition = GridManager.Instance.findCellWorldPosition(transform.position);
+        Vector3 cellWorldPosition = gridManager.FindCellWorldPosition(transform.position);
         if (Mathf.Abs(direction.x) > 0)
         {
-            Vector3 target = new Vector3(transform.position.x, cellWorldPosition.y, 0);
-            transform.position = Vector3.MoveTowards(transform.position, target, step);
+            Vector3 target = new Vector3(movedPosition.x, cellWorldPosition.y, 0);
+            movedPosition = Vector3.MoveTowards(movedPosition, target, step);
         }
         else if (Mathf.Abs(direction.y) > 0)
         {
-            Vector3 target = new Vector3(cellWorldPosition.x, transform.position.y, 0);
-            transform.position = Vector3.MoveTowards(transform.position, target, step);
+            Vector3 target = new Vector3(cellWorldPosition.x, movedPosition.y, 0);
+            movedPosition = Vector3.MoveTowards(movedPosition, target, step);
         }
+        return movedPosition;
     }
 }

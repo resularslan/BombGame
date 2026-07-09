@@ -6,9 +6,9 @@ public class FireManager : MonoBehaviour
     public float seconds = 1f;
     void OnEnable()
     {
-        StartCoroutine(fireAnimation(seconds));
+        StartCoroutine(FireAnimation(seconds));
     }
-    private IEnumerator fireAnimation(float seconds)
+    private IEnumerator FireAnimation(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         ObjectSpawner.Instance.DestroyObject(gameObject);

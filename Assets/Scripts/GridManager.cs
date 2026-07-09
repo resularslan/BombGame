@@ -32,12 +32,12 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                Vector3Int tilePos = findCellPositionByGridData(x,y);
+                Vector3Int tilePos = FindCellPositionByGridData(x,y);
                 if ((x == 1 && y == height - 2) || (x == 2 && y == height - 2) || (x == 1 && y == height - 3))
                 {
                     if (x == 1 && y == height - 2)
                     {
-                        Vector3 playerPosition = findCellWorldPosition(tilePos);
+                        Vector3 playerPosition = FindCellWorldPosition(tilePos);
                         Instantiate(player, playerPosition, Quaternion.identity);
                     }
                     gridData[x,y] = 0;
@@ -57,7 +57,7 @@ public class GridManager : MonoBehaviour
                     }
                     else
                     {
-                        spawnableLocations.Add(findCellWorldPosition(tilePos));
+                        spawnableLocations.Add(FindCellWorldPosition(tilePos));
                     }
                 }
             }
@@ -76,43 +76,43 @@ public class GridManager : MonoBehaviour
         tilemap_bricks = GetComponentsInChildren<Tilemap>()[1];
         Instance = this;
     }
-    public Vector3 findCellWorldPosition(Vector3 position)
+    public Vector3 FindCellWorldPosition(Vector3 position)
     {
         Vector3Int cellPosition = grid.WorldToCell(position);
         return grid.GetCellCenterWorld(cellPosition);
     }
 
-    public Vector3Int findCellPosition(Vector3 position)
+    public Vector3Int FindCellPosition(Vector3 position)
     {
         return grid.WorldToCell(position);
     }
-    public Vector2Int findGridDataIndex(Vector3 position)
+    public Vector2Int FindGridDataIndex(Vector3 position)
     {
         int x = Mathf.FloorToInt(position.x - bounds.xMin);
         int y = Mathf.FloorToInt(position.y - bounds.yMin);
         return new Vector2Int(x,y);
     }
-    public Vector3Int findCellPositionByGridData(int x, int y)
+    public Vector3Int FindCellPositionByGridData(int x, int y)
     {
         return new Vector3Int(x + bounds.xMin, y + bounds.yMin,0);
     }
-    public bool checkGridData(int x, int y, int value)
+    public bool CheckGridData(int x, int y, int value)
     {
-        if (!checkBounds(x,y))
+        if (!CheckBounds(x,y))
         {
             return false;
         }
         return gridData[x,y] == value;
     }
-    public void setGridData(int x, int y, int value)
+    public void SetGridData(int x, int y, int value)
     {
-        if (!checkBounds(x,y))
+        if (!CheckBounds(x,y))
         {
             return;
         }
         gridData[x,y] = value;
     }
-    public bool checkBounds(int x, int y)
+    public bool CheckBounds(int x, int y)
     {
         if (x < 0 || x >= bounds.size.x || y < 0 || y >= bounds.size.y)
         {

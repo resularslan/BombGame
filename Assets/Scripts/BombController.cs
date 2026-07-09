@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.Serialization;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -12,31 +13,38 @@ public class BombController : MonoBehaviour
     private Vector2 size;
     private int x,y;
     private IEnumerator coroutine;
+    private GridManager gridManager;
+    private ObjectSpawner objectSpawner;
 
+    void Awake()
+    {
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        gridManager = GridManager.Instance;
+    }
     void Start()
     {
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         size = spriteRenderer.bounds.size;
+        objectSpawner = ObjectSpawner.Instance;
     }
     void OnEnable()
     {   
-        x = GridManager.Instance.findGridDataIndex(transform.position).x;
-        y = GridManager.Instance.findGridDataIndex(transform.position).y;
+        x = gridManager.FindGridDataIndex(transform.position).x;
+        y = gridManager.FindGridDataIndex(transform.position).y;
         coroutine = Explode(seconds);
         StartCoroutine(coroutine);
     }
     void OnDisable()
     {
-        GridManager.Instance.setGridData(x,y,0);
+        gridManager.SetGridData(x,y,0);
         if (playerController != null)
         {
             playerController.bombCount++;
         }
         gameObject.layer = LayerMask.NameToLayer("Default");
-        if (GridManager.Instance.checkBounds(x,y))
+        if (gridManager.CheckBounds(x,y))
         {
-            createExplode();
+            CreateExplode();
         }
     }
     private IEnumerator Explode(float waitSeconds)
@@ -44,19 +52,19 @@ public class BombController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(waitSeconds);
-            ObjectSpawner.Instance.DestroyObject(gameObject);
+            objectSpawner.DestroyObject(gameObject);
         }
     }
 
-    private void explodeImmediately()
+    private void ExplodeImmediately()
     {
         StopCoroutine(coroutine);
         StartCoroutine(Explode(0f));
     }
 
-    private void createExplode()
+    private void CreateExplode()
     {
-        ObjectSpawner.Instance.InstantiateObject(fire, transform.position, quaternion.identity);
+        objectSpawner.InstantiateObject(fire, transform.position, quaternion.identity);
         Vector2Int[] directions = {Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down};
         foreach (Vector2Int direction in directions)
         {
@@ -64,34 +72,34 @@ public class BombController : MonoBehaviour
             {
                 int targetX = x + i * direction.x;
                 int targetY = y + i * direction.y;
-                if (!GridManager.Instance.checkBounds(targetX,targetY))
+                if (!gridManager.CheckBounds(targetX,targetY))
                 {
                     break;
                 }
-                int cellData = GridManager.Instance.gridData[targetX,targetY];
+                int cellData = gridManager.gridData[targetX,targetY];
                 float sizeX = size.x * i * direction.x;
                 float sizeY = size.y * i * direction.y;
                 Vector3 position = new Vector3(transform.position.x + sizeX, transform.position.y + sizeY, transform.position.z);
                 if (cellData == 0)
                 {
-                    ObjectSpawner.Instance.InstantiateObject(fire, position, quaternion.identity);
+                    objectSpawner.InstantiateObject(fire, position, quaternion.identity);
                 }
                 else
                 {
                     if (cellData == 2)
                     {
-                        Vector3Int tilePos = GridManager.Instance.findCellPosition(position);
-                        GridManager.Instance.tilemap_bricks.SetTile(tilePos, null);
-                        GridManager.Instance.setGridData(targetX,targetY,0);
-                        ObjectSpawner.Instance.InstantiateObject(fire, position, quaternion.identity);
+                        Vector3Int tilePos = gridManager.FindCellPosition(position);
+                        gridManager.tilemap_bricks.SetTile(tilePos, null);
+                        gridManager.SetGridData(targetX,targetY,0);
+                        objectSpawner.InstantiateObject(fire, position, quaternion.identity);
                     }
                     else if (cellData == 3)
                     {
-                        GameObject targetBomb = ObjectSpawner.Instance.findGameObjectByPosition[position];
+                        GameObject targetBomb = objectSpawner.findGameObjectByPosition[position];
                         if (targetBomb != null)
                         {
                             BombController targetBombController = targetBomb.GetComponent<BombController>();
-                            targetBombController.explodeImmediately();
+                            targetBombController.ExplodeImmediately();
                         }
                     }
                     break;
