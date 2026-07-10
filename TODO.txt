@@ -13,8 +13,8 @@ Make the camera follow player - DONE
 Create an enemy - DONE
 Make basic enemy AI - DONE
 Create random enemy generator - DONE 
-Make enemy die - 
-Make player die -
+Make enemy die - DONE
+Make player die - DONE
   
 
 

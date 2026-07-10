@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -19,6 +21,11 @@ public class PlayerMovement : MonoBehaviour
         gridManager = GridManager.Instance;
     }
     void Update()   
+    {
+        Movement();
+    }
+
+    private void Movement()
     {
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         if (direction.x != 0)

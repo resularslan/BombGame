@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -10,6 +11,8 @@ public class EnemyController : MonoBehaviour
     private LayerMask layerMask;
     private int x,y;
     private GridManager gridManager;
+    private Vector2Int lastCellData = new Vector2Int(-1,-1);
+    private bool isDied = false;
 
     void Awake()
     {
@@ -23,6 +26,14 @@ public class EnemyController : MonoBehaviour
         DetermineDirection();
     }
     void Update()
+    {
+        if (!isDied)
+        {
+            Movement();
+        }
+    }
+
+    private void Movement()
     {
         x = gridManager.FindGridDataIndex(transform.position).x;
         y = gridManager.FindGridDataIndex(transform.position).y;
@@ -74,13 +85,35 @@ public class EnemyController : MonoBehaviour
         Vector3Int emptyCellPosition = gridManager.FindCellPositionByGridData(cellData.x, cellData.y);
         Vector3 emptyWorldPosition = gridManager.FindCellWorldPosition(emptyCellPosition);
         float emptyPositionDot = Vector3.Dot(emptyWorldPosition,direction);
-        if (gridManager.CheckGridData(cellData.x, cellData.y, 0) && enemyPositionDotRounded == emptyPositionDot)
+        if (gridManager.CheckGridData(cellData.x, cellData.y, 0) && Mathf.Approximately(enemyPositionDotRounded,emptyPositionDot))
         {
-            float randomValue = UnityEngine.Random.Range(0,50) * Time.deltaTime;
-            if (randomValue == 0)
+            if (cellData != lastCellData)
             {
-                direction = new Vector2(direction.y, direction.x);
-            }   
+                float randomValue = UnityEngine.Random.value;
+                if (randomValue < 0.25f)
+                {
+                    direction = new Vector2(direction.y, direction.x);
+                }
+                lastCellData = cellData;
+            }
+        }
+    }
+    private IEnumerator Die()
+    {
+        isDied = true;
+        yield return new WaitForSeconds(1f);
+        gameObject.SetActive(false);
+        this.enabled = false;
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            direction = -direction;
+        }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Fire"))
+        {
+            StartCoroutine(Die());
         }
     }
 }
