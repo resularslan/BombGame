@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class FireManager : MonoBehaviour
+public class FireController : MonoBehaviour
 {
     public float seconds = 1f;
     void OnEnable()

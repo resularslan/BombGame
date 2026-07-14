@@ -1,20 +1,13 @@
-using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-[System.Serializable]
-public struct MyPair<TKey, TValue>
-{
-    public TKey Key;
-    public TValue Value;
-}
 public class ObjectSpawner : MonoBehaviour
 {
     public static ObjectSpawner Instance {get; private set;}
 
     public MyPair<GameObject, int>[] gameObjects;
-    private Dictionary<String,Queue<GameObject>> dict = new Dictionary<String, Queue<GameObject>>();
+    private Dictionary<string, Queue<GameObject>> dict = new Dictionary<string, Queue<GameObject>>();
     [System.NonSerialized] public Dictionary<Vector3,GameObject> findGameObjectByPosition = new Dictionary<Vector3, GameObject>();
 
     void Awake()

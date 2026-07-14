@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,21 +7,27 @@ public class GridManager : MonoBehaviour
     public static GridManager Instance { get; private set; }
     private Grid grid;
     [System.NonSerialized] public Tilemap tilemap_bricks;
-    private Tilemap tilemap_blocks;
-    public Tile tile_brick;
     [System.NonSerialized] public int[,] gridData;
     [System.NonSerialized] public BoundsInt bounds;
-    public GameObject player;
-    public GameObject enemy;
-    public int enemyCount = 6;
-    private List<Vector3> spawnableLocations;
+    [System.NonSerialized] public int width;
+    [System.NonSerialized] public int height;
+    [System.NonSerialized] public List<Vector3> spawnableLocations;
+    private Tilemap tilemap_blocks;
+    public Tile tile_brick;
+    private void Awake()
+    {
+        grid = GetComponent<Grid>();
+        tilemap_blocks = GetComponentsInChildren<Tilemap>()[0];
+        tilemap_bricks = GetComponentsInChildren<Tilemap>()[1];
+        Instance = this;
+    }
     void Start()
     {
         tilemap_bricks.ClearAllTiles();
         tilemap_blocks.CompressBounds();
         bounds = tilemap_blocks.cellBounds;
-        int width = bounds.size.x;
-        int height = bounds.size.y;
+        width = bounds.size.x;
+        height = bounds.size.y;
         gridData = new int[width,height];
         spawnableLocations = new List<Vector3>();
         // print(bounds.xMin);
@@ -35,11 +40,6 @@ public class GridManager : MonoBehaviour
                 Vector3Int tilePos = FindCellPositionByGridData(x,y);
                 if ((x == 1 && y == height - 2) || (x == 2 && y == height - 2) || (x == 1 && y == height - 3))
                 {
-                    if (x == 1 && y == height - 2)
-                    {
-                        Vector3 playerPosition = FindCellWorldPosition(tilePos);
-                        Instantiate(player, playerPosition, Quaternion.identity);
-                    }
                     gridData[x,y] = 0;
                     continue;
                 }
@@ -62,19 +62,6 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
-        for (int i = 0; i < enemyCount; i++)
-        {
-            int randomIndex = Random.Range(0,spawnableLocations.Count);
-            Instantiate(enemy, spawnableLocations[randomIndex], Quaternion.identity);
-            spawnableLocations.RemoveAt(randomIndex);
-        }
-    }
-    private void Awake()
-    {
-        grid = GetComponent<Grid>();
-        tilemap_blocks = GetComponentsInChildren<Tilemap>()[0];
-        tilemap_bricks = GetComponentsInChildren<Tilemap>()[1];
-        Instance = this;
     }
     public Vector3 FindCellWorldPosition(Vector3 position)
     {

@@ -15,7 +15,6 @@ Make basic enemy AI - DONE
 Create random enemy generator - DONE 
 Make enemy die - DONE
 Make player die - DONE
-  
 
 
 
