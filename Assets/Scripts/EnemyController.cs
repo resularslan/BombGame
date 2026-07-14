@@ -11,7 +11,7 @@ public class EnemyController : MonoBehaviour
     private LayerMask layerMask;
     private int x,y;
     private GridManager gridManager;
-    private Vector2Int lastCellData = new Vector2Int(-1,-1);
+    private Vector2Int lastDecisionCell = new Vector2Int(-999, -999);
     private bool isDied = false;
 
     void Awake()
@@ -85,16 +85,17 @@ public class EnemyController : MonoBehaviour
         Vector3Int emptyCellPosition = gridManager.FindCellPositionByGridData(cellData.x, cellData.y);
         Vector3 emptyWorldPosition = gridManager.FindCellWorldPosition(emptyCellPosition);
         float emptyPositionDot = Vector3.Dot(emptyWorldPosition,direction);
+        Vector2Int currentCell = new Vector2Int(x, y);
         if (gridManager.CheckGridData(cellData.x, cellData.y, 0) && Mathf.Approximately(enemyPositionDotRounded,emptyPositionDot))
         {
-            if (cellData != lastCellData)
+            if (currentCell != lastDecisionCell)
             {
                 float randomValue = UnityEngine.Random.value;
                 if (randomValue < 0.25f)
                 {
                     direction = new Vector2(direction.y, direction.x);
                 }
-                lastCellData = cellData;
+                lastDecisionCell = currentCell;
             }
         }
     }
