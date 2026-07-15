@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -40,22 +41,22 @@ public class GridManager : MonoBehaviour
                 Vector3Int tilePos = FindCellPositionByGridData(x,y);
                 if ((x == 1 && y == height - 2) || (x == 2 && y == height - 2) || (x == 1 && y == height - 3))
                 {
-                    gridData[x,y] = 0;
+                    gridData[x,y] = (int)TileType.Empty;
                     continue;
                 }
                 if (tilemap_blocks.HasTile(tilePos))
                 {
-                    gridData[x,y] = 1;
+                    gridData[x,y] = (int)TileType.Block;
                 }
                 else
                 {
-                    gridData[x,y] = 0;
+                    gridData[x,y] = (int)TileType.Empty;
                     if (Random.Range(0,3) == 1)
                     {
-                        gridData[x,y] = 2;
+                        gridData[x,y] = (int)TileType.Brick;
                         tilemap_bricks.SetTile(tilePos, tile_brick);
                     }
-                    else
+                    else if (x >= 4 && y <= height - 4)
                     {
                         spawnableLocations.Add(FindCellWorldPosition(tilePos));
                     }
@@ -83,21 +84,21 @@ public class GridManager : MonoBehaviour
     {
         return new Vector3Int(x + bounds.xMin, y + bounds.yMin,0);
     }
-    public bool CheckGridData(int x, int y, int value)
+    public bool CheckGridData(int x, int y, TileType value)
     {
         if (!CheckBounds(x,y))
         {
             return false;
         }
-        return gridData[x,y] == value;
+        return gridData[x,y] == (int) value;
     }
-    public void SetGridData(int x, int y, int value)
+    public void SetGridData(int x, int y, TileType value)
     {
         if (!CheckBounds(x,y))
         {
             return;
         }
-        gridData[x,y] = value;
+        gridData[x,y] = (int) value;
     }
     public bool CheckBounds(int x, int y)
     {
@@ -106,5 +107,15 @@ public class GridManager : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    public void CallBreakBrick(Vector3Int tilePos)
+    {
+        StartCoroutine(BreakBrick(tilePos));
+    }
+    private IEnumerator BreakBrick(Vector3Int tilePos)
+    {
+        yield return new WaitForSeconds(0.5f);
+        tilemap_bricks.SetTile(tilePos, null);
     }
 }

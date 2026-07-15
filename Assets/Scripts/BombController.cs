@@ -5,8 +5,8 @@ using UnityEngine;
 public class BombController : MonoBehaviour
 {
     [SerializeField] private float seconds = 3f;
-    private PlayerController playerController;
     [SerializeField] private GameObject fire;
+    private PlayerController playerController;
     private SpriteRenderer spriteRenderer;
     private Vector2 size;
     private int x,y;
@@ -87,9 +87,8 @@ public class BombController : MonoBehaviour
                     if (cellData == 2)
                     {
                         Vector3Int tilePos = gridManager.FindCellPosition(position);
-                        gridManager.tilemap_bricks.SetTile(tilePos, null);
+                        gridManager.CallBreakBrick(tilePos);
                         gridManager.SetGridData(targetX,targetY,0);
-                        objectSpawner.InstantiateObject(fire, position, quaternion.identity);
                     }
                     else if (cellData == 3)
                     {

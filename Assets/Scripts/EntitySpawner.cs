@@ -29,7 +29,6 @@ public class EntitySpawner : MonoBehaviour
             {
                 int randomIndex = Random.Range(0,spawnableLocations.Count);
                 Instantiate(enemy.Key, spawnableLocations[randomIndex], Quaternion.identity);
-                spawnableLocations.RemoveAt(randomIndex);
             }
         }
     }

@@ -1,5 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using NUnit.Framework;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -13,15 +16,27 @@ public class EnemyController : MonoBehaviour
     private GridManager gridManager;
     private Vector2Int lastDecisionCell = new Vector2Int(-999, -999);
     private bool isDied = false;
+    private GameObject player;
+    private float directionChangePossibility = 0.25f;
 
     void Awake()
     {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
+    void OnEnable()
+    {
+        GameManager.OnTimeZero += OpenCrazyMode;
+        PlayerController.OnPlayerDied += OnPlayerDied;
+    }
+    void OnPlayerDied()
+    {
+        GameManager.OnTimeZero -= OpenCrazyMode;
+    }
     void Start()
     {
         layerMask = ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enemy") | 1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Fire"));
         half = spriteRenderer.bounds.extents;
+        player = GameObject.FindGameObjectWithTag("Player");
         gridManager = GridManager.Instance;
         DetermineDirection();
     }
@@ -48,6 +63,39 @@ public class EnemyController : MonoBehaviour
         Vector3 movedPosition = currentPosition + movement;
         Vector3 lastPosition = PreventIntersection(movedPosition);
         transform.position = lastPosition;
+    }
+
+    private void OpenCrazyMode()
+    {
+        layerMask = 1 << LayerMask.NameToLayer("Block");
+        SetCrazyPosition();
+        DetermineDirection();
+        speed *= 3;
+        directionChangePossibility = 0.5f;
+    }
+
+    private void SetCrazyPosition()
+    {
+        List<Vector3> spawnableLocations = new List<Vector3>();
+        Vector2Int playerGridData = gridManager.FindGridDataIndex(player.transform.position);
+        int xMin = Math.Max(playerGridData.x - 5, 1);
+        int xMax = Math.Min(playerGridData.x + 5, gridManager.width - 1);
+        int yMin = Math.Max(playerGridData.y - 5, 1);
+        int yMax = Math.Min(playerGridData.y + 5, gridManager.height - 1);
+        for (int i = xMin; i <= xMax; i++)
+        {
+            if (i == playerGridData.x) continue;
+            for (int j = yMin; j <= yMax; j++)
+            {
+                if (j == playerGridData.y) continue;
+                if (gridManager.CheckGridData(i,j,TileType.Block)) continue;
+                Vector3 cellPosition = gridManager.FindCellPositionByGridData(i, j);
+                Vector3 cellWorldPosition = gridManager.FindCellWorldPosition(cellPosition);
+                spawnableLocations.Add(cellWorldPosition);
+            }
+        }
+        int randomIndex = UnityEngine.Random.Range(0,spawnableLocations.Count);
+        transform.position = spawnableLocations[randomIndex];
     }
     private void DetermineDirection()
     {
@@ -91,7 +139,7 @@ public class EnemyController : MonoBehaviour
             if (currentCell != lastDecisionCell)
             {
                 float randomValue = UnityEngine.Random.value;
-                if (randomValue < 0.25f)
+                if (randomValue < directionChangePossibility)
                 {
                     direction = new Vector2(direction.y, direction.x);
                 }

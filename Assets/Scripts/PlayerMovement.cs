@@ -8,9 +8,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 half;
     private Vector2 direction;
     private GridManager gridManager;
+    private PlayerController playerController;
     void Awake()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();  
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        playerController = gameObject.GetComponent<PlayerController>();
     }
     void Start()
     {
@@ -20,7 +22,10 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()   
     {
-        Movement();
+        if (!playerController.isDied)
+        {
+            Movement();
+        }
     }
 
     private void Movement()

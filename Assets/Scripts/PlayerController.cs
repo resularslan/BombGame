@@ -1,6 +1,5 @@
-using System.Collections;
+using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,7 +11,8 @@ public class PlayerController : MonoBehaviour
     private GridManager gridManager;
     private ObjectSpawner objectSpawner;
     private PlayerMovement playerMovement;
-    private bool isDied = false;
+    public bool isDied = false;
+    public static event Action OnPlayerDied; 
     void Start()
     {
         gridManager = GridManager.Instance;
@@ -43,25 +43,22 @@ public class PlayerController : MonoBehaviour
             if (gridManager.CheckGridData(x,y,0))
             {
                 objectSpawner.InstantiateObject(bomb, bombPosition, Quaternion.identity);
-                gridManager.SetGridData(x,y,3);
+                gridManager.SetGridData(x,y, TileType.Bomb);
                 bombCount--;
             }
         }
     }
-    private IEnumerator Die()
+    private void Die()
     {
         isDied = true;
-        playerMovement.enabled = false;
-        yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("Stage-1");
-        this.enabled = false;
+        OnPlayerDied?.Invoke();
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy") || collision.gameObject.layer == LayerMask.NameToLayer("Fire"))
         {
-            StartCoroutine(Die());
+            Die();
         }
     }
 }
