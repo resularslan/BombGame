@@ -58,7 +58,10 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy") || collision.gameObject.layer == LayerMask.NameToLayer("Fire"))
         {
-            Die();
+            if (collision.gameObject != null)
+            {
+                Die();
+            }
         }
     }
 }

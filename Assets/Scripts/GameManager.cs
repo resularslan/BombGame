@@ -5,16 +5,27 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    float gameTime = 200;
-    public static event Action OnTimeZero;
-    bool isTimeUp = false;
+    private float gameTime = 200f;
+    public static event Action OnTimeUp;
+    private bool isTimeUp = false;
+    private int life = 2;
+
+    void Awake()
+    {
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("GameController");
+        if (objects.Length > 1)
+        {
+            Destroy(this.gameObject);
+        }
+        DontDestroyOnLoad(this.gameObject);
+    }
     void OnEnable()
     {
-        PlayerController.OnPlayerDied += RestartGame;
+        PlayerController.OnPlayerDied += HandleScene;
     }
     void OnDisable()
     {
-        PlayerController.OnPlayerDied -= RestartGame;
+        PlayerController.OnPlayerDied -= HandleScene;
     }
 
     private void Update()
@@ -27,16 +38,39 @@ public class GameManager : MonoBehaviour
         {
             gameTime = 0f;
             isTimeUp = true;
-            OnTimeZero?.Invoke();
+            OnTimeUp?.Invoke();
         }
     }
-    private void RestartGame()
+    private void HandleScene()
     {
-        StartCoroutine(LoadScene());
+        if (life >= 0)
+        {
+            life--;
+            StartCoroutine(LoadScene(SceneManager.GetActiveScene().name, 2f));
+        }
+        else
+        {
+            GameOver();
+        }
     }
-    private IEnumerator LoadScene()
+    private void GameOver()
     {
-        yield return new WaitForSeconds(2);
-        SceneManager.LoadScene("Stage-1");
+        Time.timeScale = 0;
+        StartCoroutine(LoadScene("GameOver", 2f));
+    }
+    private IEnumerator LoadScene(string scene, float seconds)
+    {
+        yield return new WaitForSecondsRealtime(seconds);
+        SceneManager.LoadScene(scene);
+    }
+
+    public void StartGame()
+    {
+        StartCoroutine(LoadScene("Stage-1", 0f));
+    }
+
+    public void ReturnToMainMenu()
+    {
+        StartCoroutine(LoadScene("MainMenu", 0f));
     }
 }

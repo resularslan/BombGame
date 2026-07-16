@@ -62,7 +62,7 @@ public class BombController : MonoBehaviour
 
     private void CreateExplode()
     {
-        objectSpawner.InstantiateObject(fire, transform.position, quaternion.identity);
+        objectSpawner.InstantiateObject(fire, transform.position, Quaternion.identity);
         Vector2Int[] directions = {Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down};
         foreach (Vector2Int direction in directions)
         {
@@ -105,11 +105,14 @@ public class BombController : MonoBehaviour
             }
         }
     }
-    void OnTriggerExit2D(Collider2D other)
+    void OnTriggerExit2D(Collider2D collider)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (collider.gameObject != null)
         {
-            gameObject.layer = LayerMask.NameToLayer("Bomb");
+            if (collider.gameObject.CompareTag("Player"))
+            {
+                gameObject.layer = LayerMask.NameToLayer("Bomb");
+            }
         }
     }
 }

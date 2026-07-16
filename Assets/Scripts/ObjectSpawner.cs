@@ -61,7 +61,7 @@ public class ObjectSpawner : MonoBehaviour
         }
         original.SetActive(false);
         original.transform.position = new Vector3(-50f,-50f,0f);
-        original.transform.rotation = quaternion.identity;
+        original.transform.rotation = Quaternion.identity;
         dict[original.name].Enqueue(original);
     }
 }
