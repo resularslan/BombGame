@@ -5,19 +5,25 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private float gameTime = 200f;
+    public static GameManager Instance { get; private set; }
+    public float gameTime { get; private set; } = 200f;
     public static event Action OnTimeUp;
     private bool isTimeUp = false;
-    private int life = 2;
+    public int life { get; private set; } = 2;
+    public int score { get; private set; } = 0;
+    public bool isPlaying { get; private set; } = false;
 
     void Awake()
     {
-        GameObject[] objects = GameObject.FindGameObjectsWithTag("GameController");
-        if (objects.Length > 1)
+        if (Instance != null)
         {
-            Destroy(this.gameObject);
+            DestroyImmediate(gameObject);
         }
-        DontDestroyOnLoad(this.gameObject);
+        else 
+        { 
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
     void OnEnable()
     {
@@ -26,10 +32,15 @@ public class GameManager : MonoBehaviour
     void OnDisable()
     {
         PlayerController.OnPlayerDied -= HandleScene;
+        if (Instance == this) 
+        {
+            Instance = null;
+        }
     }
 
     private void Update()
     {
+        if (!isPlaying) return;
         if (gameTime > 0)
         {
             gameTime -= Time.deltaTime;
@@ -47,6 +58,8 @@ public class GameManager : MonoBehaviour
         {
             life--;
             StartCoroutine(LoadScene(SceneManager.GetActiveScene().name, 2f));
+            gameTime = 200f;
+            isPlaying = false;
         }
         else
         {
@@ -62,6 +75,15 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(seconds);
         SceneManager.LoadScene(scene);
+    }
+
+    public void StartPlaying()
+    {
+        isPlaying = true;
+    }
+    public void AddScore(int value)
+    {
+        score += value;
     }
 
     public void StartGame()

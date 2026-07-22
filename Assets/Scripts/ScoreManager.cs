@@ -1,14 +1,14 @@
 using System.Collections;
 using UnityEngine;
 
-public class FireController : MonoBehaviour
+public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private float seconds = 1f;
     void OnEnable()
     {
-        StartCoroutine(FireAnimation(seconds));
+        StartCoroutine(Destroy(seconds));
     }
-    private IEnumerator FireAnimation(float seconds)
+    private IEnumerator Destroy(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         ObjectSpawner.Instance.DestroyObject(gameObject);

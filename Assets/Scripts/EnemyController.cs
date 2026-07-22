@@ -121,15 +121,12 @@ public class EnemyController : MonoBehaviour
         isDied = true;
         yield return new WaitForSeconds(1f);
         gameObject.SetActive(false);
+        UIManager.Instance.CreateScore(100, transform.position);
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject != null)
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-            {
-                direction = -direction;
-            }
             if (collision.gameObject.layer == LayerMask.NameToLayer("Fire"))
             {
                 StartCoroutine(Die());
