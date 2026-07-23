@@ -4,6 +4,7 @@ public class CameraController : MonoBehaviour
 {
     private GameObject player;
     private Camera camera;
+    [SerializeField] private float speed;
     private float min;
     private float max;
     private Vector3 newPosition;
@@ -27,6 +28,6 @@ public class CameraController : MonoBehaviour
         {
             newPosition.x = max;
         }
-        camera.transform.position = newPosition;
+        camera.transform.position = Vector3.MoveTowards(camera.transform.position, newPosition, speed * Time.deltaTime);
     }
 }

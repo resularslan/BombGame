@@ -14,7 +14,8 @@ public class GridManager : MonoBehaviour
     [System.NonSerialized] public int height;
     [System.NonSerialized] public List<Vector3> spawnableLocations;
     private Tilemap tilemap_blocks;
-    public Tile tile_brick;
+    [SerializeField] private Tile tile_brick;
+    
     private void Awake()
     {
         grid = GetComponent<Grid>();

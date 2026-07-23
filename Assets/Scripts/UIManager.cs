@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -17,19 +18,21 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI timeText;
     private TextMeshProUGUI lifeText;
     private TextMeshProUGUI scoreText;
+    private GameManager gameManager;
     void Awake()
     {
         Instance = this;
     }
     void Start()
     {
+        gameManager = GameManager.Instance;
         stageText = stageTextObject.GetComponent<TextMeshProUGUI>();
         stageText.SetText(SceneManager.GetActiveScene().name);
         StartCoroutine(DeactivateInformationUI());
     }
     void Update()
     {
-        if (GameManager.Instance.isPlaying)
+        if (gameManager.isPlaying)
         {
             SetTimeUI();
             SetLifeUI();
@@ -41,36 +44,38 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(deactivateTime);
         stageTextObject.SetActive(false);
         bacground.SetActive(false);
-        GameManager.Instance.StartPlaying();
+        gameManager.StartPlaying();
     }
 
     private void SetTimeUI()
     {
         timeTextObject.SetActive(true);
         timeText = timeTextObject.GetComponent<TextMeshProUGUI>();
-        string value = Mathf.CeilToInt(GameManager.Instance.gameTime).ToString();
+        string value = Mathf.CeilToInt(gameManager.gameTime).ToString();
         timeText.SetText("TIME: " + value);
     }
     private void SetLifeUI()
     {
         lifeTextObject.SetActive(true);
         lifeText = lifeTextObject.GetComponent<TextMeshProUGUI>();
-        string value = GameManager.Instance.life.ToString();
+        string value = gameManager.life.ToString();
         lifeText.SetText("LEFT: " + value);
     }
     private void SetScoreUI()
     {
         scoreTextObject.SetActive(true);
         scoreText = scoreTextObject.GetComponent<TextMeshProUGUI>();
-        string value = GameManager.Instance.score.ToString();
+        string value = gameManager.score.ToString();
         scoreText.SetText(value);
     }
 
     public void CreateScore(int value, Vector3 position)
     {
-        GameManager.Instance.AddScore(value);
-        TextMeshProUGUI _text = score.GetComponentInChildren<TextMeshProUGUI>();
-        _text.SetText(value.ToString());
-        ObjectSpawner.Instance.InstantiateObject(score, position, Quaternion.identity);
+        gameManager.AddScore(value);
+        GameObject textObject = ObjectSpawner.Instance.InstantiateObject(score, position, Quaternion.identity);
+        TextMeshPro text = textObject.GetComponent<TextMeshPro>();
+        string _value = gameManager.topScore.ToString();
+        text.SetText(_value);
+
     }
 }

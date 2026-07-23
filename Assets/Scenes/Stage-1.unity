@@ -154,7 +154,7 @@ MonoBehaviour:
     Value: 10
   - Key: {fileID: 9206473614337219985, guid: fb97c7a34b158c44f80941eb8945acda, type: 3}
     Value: 50
-  - Key: {fileID: 5581433350475088049, guid: e769990c4b0c0214c940084951c52230, type: 3}
+  - Key: {fileID: 6780176932458764017, guid: e769990c4b0c0214c940084951c52230, type: 3}
     Value: 6
 --- !u!4 &267963687
 Transform:
@@ -222,7 +222,7 @@ MonoBehaviour:
   timeTextObject: {fileID: 965245562}
   lifeTextObject: {fileID: 2024450433}
   scoreTextObject: {fileID: 463878617}
-  score: {fileID: 5581433350475088049, guid: e769990c4b0c0214c940084951c52230, type: 3}
+  score: {fileID: 6780176932458764017, guid: e769990c4b0c0214c940084951c52230, type: 3}
 --- !u!4 &306862189
 Transform:
   m_ObjectHideFlags: 0
@@ -569,6 +569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 908689130ce1c0e42b3b2e27b367ece0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  speed: 1
 --- !u!1 &963251388
 GameObject:
   m_ObjectHideFlags: 0

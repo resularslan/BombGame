@@ -28,7 +28,7 @@ public class ObjectSpawner : MonoBehaviour
         }
     }
 
-    public void InstantiateObject(GameObject original, Vector3 position, Quaternion rotation)
+    public GameObject InstantiateObject(GameObject original, Vector3 position, Quaternion rotation)
     {
         GameObject thisObject = null;
         string key = original.name + "(Clone)";
@@ -51,6 +51,7 @@ public class ObjectSpawner : MonoBehaviour
         }
         thisObject.transform.rotation = rotation;
         thisObject.SetActive(true);
+        return thisObject;
     }
 
     public void DestroyObject(GameObject original)

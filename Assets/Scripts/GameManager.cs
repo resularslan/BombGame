@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public int life { get; private set; } = 2;
     public int score { get; private set; } = 0;
     public bool isPlaying { get; private set; } = false;
+    public int topScore { get; private set; } 
 
     void Awake()
     {
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
     }
     void OnEnable()
     {
+        topScore = PlayerPrefs.GetInt("TopScore");
         PlayerController.OnPlayerDied += HandleScene;
     }
     void OnDisable()
@@ -54,8 +56,9 @@ public class GameManager : MonoBehaviour
     }
     private void HandleScene()
     {
-        if (life >= 0)
+        if (life > 0)
         {
+            Time.timeScale = 0;
             life--;
             StartCoroutine(LoadScene(SceneManager.GetActiveScene().name, 2f));
             gameTime = 200f;
@@ -68,6 +71,8 @@ public class GameManager : MonoBehaviour
     }
     private void GameOver()
     {
+        topScore = Math.Max(score, topScore);
+        SaveScore();
         Time.timeScale = 0;
         StartCoroutine(LoadScene("GameOver", 2f));
     }
@@ -76,10 +81,16 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(seconds);
         SceneManager.LoadScene(scene);
     }
+    private void SaveScore()
+    {
+        PlayerPrefs.SetInt("TopScore", topScore);
+        PlayerPrefs.Save();
+    }
 
     public void StartPlaying()
     {
         isPlaying = true;
+        Time.timeScale = 1;
     }
     public void AddScore(int value)
     {

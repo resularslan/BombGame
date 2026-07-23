@@ -1,7 +1,8 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
-public class ScoreManager : MonoBehaviour
+public class ScoreTextManager : MonoBehaviour
 {
     [SerializeField] private float seconds = 1f;
     void OnEnable()

@@ -39,7 +39,7 @@ public class BombController : MonoBehaviour
         {
             playerController.bombCount++;
         }
-        gameObject.layer = LayerMask.NameToLayer("Default");
+        gameObject.layer = LayerMask.NameToLayer("_Bomb");
         if (gridManager.CheckBounds(x,y))
         {
             CreateExplode();
@@ -62,7 +62,7 @@ public class BombController : MonoBehaviour
 
     private void CreateExplode()
     {
-        objectSpawner.InstantiateObject(fire, transform.position, Quaternion.identity);
+        objectSpawner?.InstantiateObject(fire, transform.position, Quaternion.identity);
         Vector2Int[] directions = {Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down};
         foreach (Vector2Int direction in directions)
         {
@@ -89,6 +89,7 @@ public class BombController : MonoBehaviour
                         Vector3Int tilePos = gridManager.FindCellPosition(position);
                         gridManager.CallBreakBrick(tilePos);
                         gridManager.SetGridData(targetX,targetY,0);
+                        objectSpawner.InstantiateObject(fire, position, quaternion.identity);
                     }
                     else if (cellData == 3)
                     {
