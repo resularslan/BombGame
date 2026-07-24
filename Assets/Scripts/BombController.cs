@@ -80,7 +80,7 @@ public class BombController : MonoBehaviour
                 Vector3 position = new Vector3(transform.position.x + sizeX, transform.position.y + sizeY, transform.position.z);
                 if (cellData == 0)
                 {
-                    objectSpawner.InstantiateObject(fire, position, quaternion.identity);
+                    objectSpawner?.InstantiateObject(fire, position, quaternion.identity);
                 }
                 else
                 {
@@ -89,7 +89,7 @@ public class BombController : MonoBehaviour
                         Vector3Int tilePos = gridManager.FindCellPosition(position);
                         gridManager.CallBreakBrick(tilePos);
                         gridManager.SetGridData(targetX,targetY,0);
-                        objectSpawner.InstantiateObject(fire, position, quaternion.identity);
+                        objectSpawner?.InstantiateObject(fire, position, quaternion.identity);
                     }
                     else if (cellData == 3)
                     {
@@ -97,7 +97,7 @@ public class BombController : MonoBehaviour
                         if (targetBomb != null)
                         {
                             BombController targetBombController = targetBomb.GetComponent<BombController>();
-                            targetBombController.ExplodeImmediately();
+                            targetBombController?.ExplodeImmediately();
                         }
                     }
                     break;

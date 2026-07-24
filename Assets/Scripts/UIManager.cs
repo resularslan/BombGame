@@ -43,10 +43,8 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(deactivateTime);
         stageTextObject.SetActive(false);
         bacground.SetActive(false);
-        gameManager.StartPlaying();
         ActivatePlayingUI();
-        SetLifeUI();
-        SetScoreUI();
+        gameManager.StartPlaying();
     }
     private void ActivatePlayingUI()
     {
@@ -56,6 +54,9 @@ public class UIManager : MonoBehaviour
         timeText = timeTextObject.GetComponent<TextMeshProUGUI>();
         lifeText = lifeTextObject.GetComponent<TextMeshProUGUI>();
         scoreText = scoreTextObject.GetComponent<TextMeshProUGUI>();
+        SetLifeUI();
+        SetScoreUI();
+        SetTimeUI();
     }
 
     private void SetTimeUI()

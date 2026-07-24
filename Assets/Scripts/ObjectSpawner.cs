@@ -6,7 +6,8 @@ public class ObjectSpawner : MonoBehaviour
     public static ObjectSpawner Instance {get; private set;}
 
     public MyPair<GameObject, int>[] gameObjects;
-    private Dictionary<string, Queue<GameObject>> dict = new Dictionary<string, Queue<GameObject>>();
+    private Dictionary<EntityId, Queue<GameObject>> dict = new Dictionary<EntityId, Queue<GameObject>>();
+    private Dictionary<EntityId, EntityId> cloneToPrefabMap = new Dictionary<EntityId, EntityId>();
     [System.NonSerialized] public Dictionary<Vector3,GameObject> findGameObjectByPosition = new Dictionary<Vector3, GameObject>();
 
     void Awake()
@@ -17,37 +18,34 @@ public class ObjectSpawner : MonoBehaviour
     {
         foreach (MyPair<GameObject,int> pair in gameObjects)
         {
-            dict.Add(pair.Key.name + "(Clone)", new Queue<GameObject>());
+            EntityId entityId = pair.Key.GetEntityId();
+            dict.Add(entityId, new Queue<GameObject>());
             for (int i = 0; i < pair.Value; i++)
             {
                 GameObject clone = Instantiate(pair.Key, new Vector3(-50f, -50f, 0f), Quaternion.identity);
                 clone.SetActive(false);
-                dict[clone.name].Enqueue(clone);
+                dict[entityId].Enqueue(clone);
+                cloneToPrefabMap.Add(clone.GetEntityId(),entityId);
             }
         }
     }
 
     public GameObject InstantiateObject(GameObject original, Vector3 position, Quaternion rotation)
     {
-        GameObject thisObject = null;
-        string key = original.name + "(Clone)";
-        if (dict[key].Count != 0)
+        GameObject thisObject;
+        EntityId key = original.GetEntityId();
+        if (dict.ContainsKey(key) && dict[key].Count != 0)
         {
             thisObject = dict[key].Dequeue();
         }
         else
         {
             thisObject = Instantiate(original, position, rotation);
+            dict.Add(key, new Queue<GameObject>());
+            cloneToPrefabMap.Add(thisObject.GetEntityId(), key);
         }
         thisObject.transform.position = position;
-        if (findGameObjectByPosition.ContainsKey(position))
-        {
-            findGameObjectByPosition[position] = thisObject;
-        }
-        else
-        {
-            findGameObjectByPosition.Add(position,thisObject);
-        }
+        findGameObjectByPosition[position] = thisObject;
         thisObject.transform.rotation = rotation;
         thisObject.SetActive(true);
         return thisObject;
@@ -55,13 +53,22 @@ public class ObjectSpawner : MonoBehaviour
 
     public void DestroyObject(GameObject original)
     {
-        if (findGameObjectByPosition.ContainsKey(original.transform.position))
+        EntityId destroyObjectId = original.GetEntityId();
+        Vector3 position = original.transform.position;
+        if (findGameObjectByPosition.ContainsKey(position))
         {
-            findGameObjectByPosition.Remove(original.transform.position);
+            findGameObjectByPosition.Remove(position);
         }
         original.SetActive(false);
         original.transform.position = new Vector3(-50f,-50f,0f);
         original.transform.rotation = Quaternion.identity;
-        dict[original.name].Enqueue(original);
+        if (cloneToPrefabMap.TryGetValue(destroyObjectId, out EntityId key))
+        {
+            dict[key].Enqueue(original);
+        }
+        else
+        {
+            Destroy(original);
+        }
     }
 }
