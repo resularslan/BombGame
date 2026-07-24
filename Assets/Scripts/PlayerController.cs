@@ -7,17 +7,15 @@ public class PlayerController : MonoBehaviour
     private Vector3 bombPosition;
     [System.NonSerialized] public int maxBomb = 10; 
     public int bombLevel = 1;
-    public int bombCount;
+    public int bombCount = 1;
     private GridManager gridManager;
     private ObjectSpawner objectSpawner;
-    private PlayerMovement playerMovement;
-    public bool isDied = false;
+    public bool isDied {get; private set;} = false;
     public static event Action OnPlayerDied; 
     void Start()
     {
         gridManager = GridManager.Instance;
         objectSpawner = ObjectSpawner.Instance;
-        playerMovement = gameObject.GetComponent<PlayerMovement>();
     }
     void Update()
     {

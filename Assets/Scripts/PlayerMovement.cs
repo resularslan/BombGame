@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 2.5f;
+    public float speed { get; private set; } = 2f;
     private LayerMask layerMask;
     private SpriteRenderer spriteRenderer;
     private Vector2 half;

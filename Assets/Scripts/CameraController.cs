@@ -4,13 +4,14 @@ public class CameraController : MonoBehaviour
 {
     private GameObject player;
     private Camera camera;
-    [SerializeField] private float speed;
+    private float speed;
     private float min;
     private float max;
     private Vector3 newPosition;
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        speed = player.GetComponent<PlayerMovement>().speed * 0.9f;
         camera = Camera.main;
         newPosition = camera.transform.position;
         float camWidth = camera.orthographicSize * 2 * camera.aspect;

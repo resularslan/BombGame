@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(LoadScene(SceneManager.GetActiveScene().name, 2f));
             gameTime = 200f;
             isPlaying = false;
+            UIManager.Instance.SetLifeUI();
         }
         else
         {
