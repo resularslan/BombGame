@@ -167,7 +167,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.9, y: 0.9}
+  m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
 --- !u!114 &3361320305008463756
 MonoBehaviour:
@@ -198,4 +198,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   bomb: {fileID: 3939457356474607527, guid: 53c8b92635f7df14ebda8c913d587a68, type: 3}
   bombLevel: 1
-  bombCount: 2
+  bombCount: 1

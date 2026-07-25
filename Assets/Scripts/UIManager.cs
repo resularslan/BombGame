@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.WSA;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,11 +14,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject scoreTextObject;
     [SerializeField] private GameObject score;
     [SerializeField] private GameObject win;
+    [SerializeField] private GameObject pauseMenu;
     private TextMeshProUGUI stageText;
     private TextMeshProUGUI timeText;
     private TextMeshProUGUI lifeText;
     private TextMeshProUGUI scoreText;
     private GameManager gameManager;
+    private bool paused = false;
     void Awake()
     {
         Instance = this;
@@ -39,6 +39,29 @@ public class UIManager : MonoBehaviour
             return;
         }
         SetTimeUI();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (paused)
+            {
+                DeactivatePauseMenu();
+            }
+            else
+            {
+                ActivatePauseMenu();
+            }
+        }
+    }
+    private void ActivatePauseMenu()
+    {
+        Time.timeScale = 0;
+        pauseMenu.SetActive(true);
+        paused = true;
+    }
+    private void DeactivatePauseMenu()
+    {
+        Time.timeScale = 1f;
+        pauseMenu.SetActive(false);
+        paused = false;
     }
     private IEnumerator DeactivateInformationUI()
     {
@@ -83,8 +106,7 @@ public class UIManager : MonoBehaviour
         SetScoreUI();
         GameObject textObject = ObjectSpawner.Instance.InstantiateObject(score, position, Quaternion.identity);
         TextMeshPro text = textObject.GetComponent<TextMeshPro>();
-        string _value = gameManager.topScore.ToString();
-        text.SetText(_value);
+        text.SetText(value.ToString());
     }
     public void ActivateWinningUI()
     {

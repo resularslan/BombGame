@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    public float gameTime { get; private set; } = 600f;
+    public float gameTime { get; private set; } = 200f;
     public static event Action OnTimeUp;
     private bool isTimeUp = false;
     public int life { get; private set; } = 2;
@@ -63,7 +63,6 @@ public class GameManager : MonoBehaviour
             StartCoroutine(LoadScene(SceneManager.GetActiveScene().name, 2f));
             gameTime = 200f;
             isPlaying = false;
-            UIManager.Instance.SetLifeUI();
         }
         else
         {
@@ -72,8 +71,6 @@ public class GameManager : MonoBehaviour
     }
     private void GameOver()
     {
-        topScore = Math.Max(score, topScore);
-        SaveScore();
         Time.timeScale = 0;
         StartCoroutine(LoadScene("GameOver", 2f));
         isPlaying = false;
@@ -93,6 +90,7 @@ public class GameManager : MonoBehaviour
     {
         isPlaying = true;
         Time.timeScale = 1;
+        UIManager.Instance.SetLifeUI();
     }
     public void AddScore(int value)
     {
@@ -115,6 +113,8 @@ public class GameManager : MonoBehaviour
     }
     public IEnumerator Win()
     {
+        topScore = Math.Max(score, topScore);
+        SaveScore();
         UIManager.Instance.ActivateWinningUI();
         Time.timeScale = 0f;
         yield return new WaitForSeconds(2f);

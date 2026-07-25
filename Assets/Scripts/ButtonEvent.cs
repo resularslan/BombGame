@@ -5,7 +5,7 @@ public class ButtonEvent : MonoBehaviour
     private enum State
     {
         MainMenu,
-        GameOver
+        StartGame
     }
     [SerializeField] private State currentState;
     void Update()
@@ -14,10 +14,10 @@ public class ButtonEvent : MonoBehaviour
         {
             switch (currentState)
             {
-                case State.GameOver:
+                case State.MainMenu:
                     GameManager.Instance.ReturnToMainMenu();
                     break;
-                case State.MainMenu:
+                case State.StartGame:
                     GameManager.Instance.StartGame();
                     break;
             }
