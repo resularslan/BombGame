@@ -181,3 +181,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   speed: 2
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 27905

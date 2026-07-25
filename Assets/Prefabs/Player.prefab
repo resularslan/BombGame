@@ -181,6 +181,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615eddbb75e3cd44b8fde0308e30571e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32001
 --- !u!114 &4348528763606916360
 MonoBehaviour:
   m_ObjectHideFlags: 0

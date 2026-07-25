@@ -8,6 +8,10 @@ public class FireController : MonoBehaviour
     {
         StartCoroutine(FireAnimation(seconds));
     }
+    void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
     private IEnumerator FireAnimation(float seconds)
     {
         yield return new WaitForSeconds(seconds);

@@ -9,6 +9,10 @@ public class ScoreTextManager : MonoBehaviour
     {
         StartCoroutine(Destroy(seconds));
     }
+    void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
     private IEnumerator Destroy(float seconds)
     {
         yield return new WaitForSeconds(seconds);

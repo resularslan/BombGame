@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
     public float speed = 2f;
     private SpriteRenderer spriteRenderer;
     private Vector2 half;
+    [SerializeField] private LayerMask excludedLayers; 
     private LayerMask layerMask;
     private int x,y;
     private GridManager gridManager;
@@ -27,9 +28,13 @@ public class EnemyController : MonoBehaviour
     {
         GameManager.OnTimeUp -= OpenCrazyMode;
     }
+    void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
     void Start()
     {
-        layerMask = ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enemy") | 1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Fire"));
+        layerMask = ~excludedLayers; 
         half = spriteRenderer.bounds.extents;
         gridManager = GridManager.Instance;
         DetermineDirection();
@@ -122,6 +127,7 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(1f);
         gameObject.SetActive(false);
         UIManager.Instance.CreateScore(100, transform.position);
+        EntitySpawner.Instance.activeEnemies.Remove(gameObject.GetEntityId());
     }
     void OnTriggerEnter2D(Collider2D collision)
     {

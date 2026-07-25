@@ -32,6 +32,10 @@ public class BombController : MonoBehaviour
         coroutine = Explode(seconds);
         StartCoroutine(coroutine);
     }
+    void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
     void OnDisable()
     {
         gridManager.SetGridData(x,y,0);
@@ -47,11 +51,9 @@ public class BombController : MonoBehaviour
     }
     private IEnumerator Explode(float waitSeconds)
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(waitSeconds);
-            objectSpawner.DestroyObject(gameObject);
-        }
+        yield return new WaitForSeconds(waitSeconds);
+        if (this == null) yield break;
+        objectSpawner.DestroyObject(gameObject);
     }
 
     private void ExplodeImmediately()
@@ -62,7 +64,7 @@ public class BombController : MonoBehaviour
 
     private void CreateExplode()
     {
-        objectSpawner?.InstantiateObject(fire, transform.position, Quaternion.identity);
+        objectSpawner.InstantiateObject(fire, transform.position, Quaternion.identity);
         Vector2Int[] directions = {Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down};
         foreach (Vector2Int direction in directions)
         {
@@ -74,30 +76,30 @@ public class BombController : MonoBehaviour
                 {
                     break;
                 }
-                int cellData = gridManager.gridData[targetX,targetY];
+                TileType cellData = gridManager.gridData[targetX,targetY];
                 float sizeX = size.x * i * direction.x;
                 float sizeY = size.y * i * direction.y;
                 Vector3 position = new Vector3(transform.position.x + sizeX, transform.position.y + sizeY, transform.position.z);
-                if (cellData == 0)
+                if (cellData == TileType.Empty)
                 {
-                    objectSpawner?.InstantiateObject(fire, position, quaternion.identity);
+                    objectSpawner.InstantiateObject(fire, position, quaternion.identity);
                 }
                 else
                 {
-                    if (cellData == 2)
+                    if (cellData == TileType.Brick)
                     {
                         Vector3Int tilePos = gridManager.FindCellPosition(position);
                         gridManager.CallBreakBrick(tilePos);
                         gridManager.SetGridData(targetX,targetY,0);
-                        objectSpawner?.InstantiateObject(fire, position, quaternion.identity);
+                        objectSpawner.InstantiateObject(fire, position, quaternion.identity);
                     }
-                    else if (cellData == 3)
+                    else if (cellData == TileType.Bomb)
                     {
                         GameObject targetBomb = objectSpawner.findGameObjectByPosition[position];
                         if (targetBomb != null)
                         {
                             BombController targetBombController = targetBomb.GetComponent<BombController>();
-                            targetBombController?.ExplodeImmediately();
+                            targetBombController.ExplodeImmediately();
                         }
                     }
                     break;

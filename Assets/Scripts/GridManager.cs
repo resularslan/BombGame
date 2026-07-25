@@ -7,12 +7,13 @@ public class GridManager : MonoBehaviour
 {
     public static GridManager Instance { get; private set; }
     private Grid grid;
-    [System.NonSerialized] public Tilemap tilemap_bricks;
-    [System.NonSerialized] public int[,] gridData;
-    [System.NonSerialized] public BoundsInt bounds;
-    [System.NonSerialized] public int width;
-    [System.NonSerialized] public int height;
-    [System.NonSerialized] public List<Vector3> spawnableLocations;
+    private Tilemap tilemap_bricks;
+    public TileType[,] gridData {get; private set;}
+    public BoundsInt bounds {get; private set;}
+    public int width {get; private set;}
+    public int height {get; private set;}
+    public List<Vector3> spawnableLocations {get; private set;}
+    public List<Vector3> brickLocations {get; private set;}
     private Tilemap tilemap_blocks;
     [SerializeField] private Tile tile_brick;
     
@@ -30,8 +31,9 @@ public class GridManager : MonoBehaviour
         bounds = tilemap_blocks.cellBounds;
         width = bounds.size.x;
         height = bounds.size.y;
-        gridData = new int[width,height];
+        gridData = new TileType[width,height];
         spawnableLocations = new List<Vector3>();
+        brickLocations = new List<Vector3>();
         // print(bounds.xMin);
         // print(bounds.yMin);
         // tilemap_bricks.SetTile(new Vector3Int(0,0,0), tile_brick);
@@ -42,20 +44,21 @@ public class GridManager : MonoBehaviour
                 Vector3Int tilePos = FindCellPositionByGridData(x,y);
                 if ((x == 1 && y == height - 2) || (x == 2 && y == height - 2) || (x == 1 && y == height - 3))
                 {
-                    gridData[x,y] = (int)TileType.Empty;
+                    gridData[x,y] = TileType.Empty;
                     continue;
                 }
                 if (tilemap_blocks.HasTile(tilePos))
                 {
-                    gridData[x,y] = (int)TileType.Block;
+                    gridData[x,y] = TileType.Block;
                 }
                 else
                 {
-                    gridData[x,y] = (int)TileType.Empty;
+                    gridData[x,y] = TileType.Empty;
                     if (Random.Range(0,3) == 1)
                     {
-                        gridData[x,y] = (int)TileType.Brick;
+                        gridData[x,y] = TileType.Brick;
                         tilemap_bricks.SetTile(tilePos, tile_brick);
+                        brickLocations.Add(FindCellWorldPosition(tilePos));
                     }
                     else if (x >= 4 && y <= height - 4)
                     {
@@ -91,7 +94,7 @@ public class GridManager : MonoBehaviour
         {
             return false;
         }
-        return gridData[x,y] == (int) value;
+        return gridData[x,y] == value;
     }
     public void SetGridData(int x, int y, TileType value)
     {
@@ -99,7 +102,7 @@ public class GridManager : MonoBehaviour
         {
             return;
         }
-        gridData[x,y] = (int) value;
+        gridData[x,y] = value;
     }
     public bool CheckBounds(int x, int y)
     {

@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject lifeTextObject;
     [SerializeField] private GameObject scoreTextObject;
     [SerializeField] private GameObject score;
+    [SerializeField] private GameObject win;
     private TextMeshProUGUI stageText;
     private TextMeshProUGUI timeText;
     private TextMeshProUGUI lifeText;
@@ -33,10 +34,11 @@ public class UIManager : MonoBehaviour
     }
     void Update()
     {
-        if (gameManager.isPlaying)
+        if (!gameManager.isPlaying)
         {
-            SetTimeUI();
+            return;
         }
+        SetTimeUI();
     }
     private IEnumerator DeactivateInformationUI()
     {
@@ -83,6 +85,9 @@ public class UIManager : MonoBehaviour
         TextMeshPro text = textObject.GetComponent<TextMeshPro>();
         string _value = gameManager.topScore.ToString();
         text.SetText(_value);
-
+    }
+    public void ActivateWinningUI()
+    {
+        win.SetActive(true);
     }
 }

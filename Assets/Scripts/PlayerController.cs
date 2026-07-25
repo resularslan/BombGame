@@ -61,5 +61,20 @@ public class PlayerController : MonoBehaviour
                 Die();
             }
         }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("FireUp"))
+        {
+            if (collision.gameObject != null)
+            {
+                bombLevel++;
+                objectSpawner.DestroyObject(collision.gameObject);
+            }
+        }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Gate"))
+        {
+            if (collision.gameObject != null)
+            {
+                if (EntitySpawner.Instance.activeEnemies.Count == 0) GameManager.Instance.CallWin();
+            }
+        }
     }
 }

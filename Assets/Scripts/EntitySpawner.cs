@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class EntitySpawner : MonoBehaviour
 {
+    public static EntitySpawner Instance { get; private set; }
     private GridManager gridManager;
-    public GameObject playerObject;
+    [SerializeField] private GameObject playerObject;
     private GameObject player;
     public MyPair<GameObject, int>[] enemies;
     private List<GameObject> spawnedEnemies = new List<GameObject>();
     private List<Vector3> crazySpawnableLocations = new List<Vector3>();
+    [NonSerialized] public List<EntityId> activeEnemies = new List<EntityId>();
+    void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
         gridManager = GridManager.Instance;
-        SpawnplayerObject();
+        SpawnPlayerObject();
         SpawnEnemies();
     }
     void OnEnable()
@@ -24,7 +30,7 @@ public class EntitySpawner : MonoBehaviour
     {
         GameManager.OnTimeUp -= MakeEnemiesCrazy; 
     }
-    void SpawnplayerObject()
+    void SpawnPlayerObject()
     {
         int height = gridManager.height;
         Vector3Int tilePos = gridManager.FindCellPositionByGridData(1, height - 2);
@@ -44,6 +50,7 @@ public class EntitySpawner : MonoBehaviour
                 GameObject spawnedEnemy = Instantiate(enemyObject, spawnableLocations[randomIndex], Quaternion.identity);
                 spawnableLocations.RemoveAt(randomIndex);
                 spawnedEnemies.Add(spawnedEnemy);
+                activeEnemies.Add(spawnedEnemy.GetEntityId());
             }
         }
     }
@@ -59,6 +66,7 @@ public class EntitySpawner : MonoBehaviour
             if (!enemy.activeInHierarchy)
             {
                 enemy.SetActive(true);
+                activeEnemies.Add(enemy.GetEntityId());
             }
             crazySpawnableLocations.RemoveAt(randomIndex);
         }

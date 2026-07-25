@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float speed { get; private set; } = 2f;
+    [SerializeField] private LayerMask excludedLayers; 
     private LayerMask layerMask;
     private SpriteRenderer spriteRenderer;
     private Vector2 half;
@@ -16,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Start()
     {
-        layerMask = ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enemy") |  1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Fire") | 1 << LayerMask.NameToLayer("_Bomb"));
+        layerMask = ~excludedLayers;
         half = spriteRenderer.bounds.extents;
         gridManager = GridManager.Instance;
     }
