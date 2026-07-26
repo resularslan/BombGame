@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
     private Vector2Int lastDecisionCell = new Vector2Int(-999, -999);
     private bool isDied = false;
     private float directionChangePossibility = 0.25f;
+    private bool cannotMove = false;
 
     void Awake()
     {
@@ -49,6 +50,10 @@ public class EnemyController : MonoBehaviour
 
     private void Movement()
     {
+        if (cannotMove)
+        {
+            DetermineDirection();
+        }
         x = gridManager.FindGridDataIndex(transform.position).x;
         y = gridManager.FindGridDataIndex(transform.position).y;
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Mathf.Abs(Vector2.Dot(half,direction)), layerMask);
@@ -78,10 +83,19 @@ public class EnemyController : MonoBehaviour
         if (gridManager.CheckGridData(x + 1, y,0) || gridManager.CheckGridData(x - 1, y,0))
         {
             direction = Vector2.right;
+            cannotMove = false;
         }
         else if (gridManager.CheckGridData(x, y + 1,0) || gridManager.CheckGridData(x, y - 1,0))
         {
             direction = Vector2.up;
+            cannotMove = false;
+        }
+        else
+        {
+            if (!cannotMove)
+            {
+                cannotMove = true;   
+            }
         }
     }
     private Vector3 PreventIntersection(Vector3 movedPosition)

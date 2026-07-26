@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class ButtonEvent : MonoBehaviour
 {
-    private enum State
+    public enum State
     {
         MainMenu,
-        StartGame
+        StartGame,
+        ExitGame
     }
-    [SerializeField] private State currentState;
+    public State currentState;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
@@ -19,6 +20,9 @@ public class ButtonEvent : MonoBehaviour
                     break;
                 case State.StartGame:
                     GameManager.Instance.StartGame();
+                    break;
+                case State.ExitGame:
+                    GameManager.Instance.ExitGame();
                     break;
             }
         }
