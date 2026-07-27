@@ -71,6 +71,7 @@ public class EnemyController : MonoBehaviour
 
     private void OpenCrazyMode()
     {
+        isDied = false;
         layerMask = 1 << LayerMask.NameToLayer("Block");
         DetermineDirection();
         speed *= 3;

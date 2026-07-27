@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         topScore = PlayerPrefs.GetInt("TopScore");
+        Application.targetFrameRate = 60;
     }
     void OnEnable()
     {
@@ -79,6 +80,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(seconds);
         SceneManager.LoadScene(scene);
+        Time.timeScale = 1f;
     }
     private void SaveScore()
     {
@@ -99,6 +101,10 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        gameTime = 200f;
+        isPlaying = false;
+        score = 0;
+        life = 2;
         StartCoroutine(LoadScene("Stage-1", 0f));
     }
 
@@ -119,7 +125,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         yield return new WaitForSecondsRealtime(2f);
         ReturnToMainMenu();
-        SaveScore();
     }
     public void ExitGame()
     {

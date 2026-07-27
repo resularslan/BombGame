@@ -65,6 +65,7 @@ public class UIManager : MonoBehaviour
     }
     private IEnumerator DeactivateInformationUI()
     {
+        Time.timeScale = 0f;
         yield return new WaitForSecondsRealtime(deactivateTime);
         stageTextObject.SetActive(false);
         bacground.SetActive(false);
