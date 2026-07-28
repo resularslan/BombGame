@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(LoadScene(SceneManager.GetActiveScene().name, 2f));
             gameTime = 200f;
             isPlaying = false;
+            isTimeUp = false;
         }
         else
         {
@@ -105,6 +106,7 @@ public class GameManager : MonoBehaviour
         isPlaying = false;
         score = 0;
         life = 2;
+        isTimeUp = false;
         StartCoroutine(LoadScene("Stage-1", 0f));
     }
 
