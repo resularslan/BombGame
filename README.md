@@ -4,6 +4,7 @@ A grid-based action game inspired by the NES Bomberman mechanics, developed to p
 
 ### Video Demo: 
 
+https://github.com/user-attachments/assets/aa8fe3ee-56fe-4ca9-ab50-2f500d9db001
 
 ## 🎮 Features
 * Collision detections with Unity Physics Raycast.
